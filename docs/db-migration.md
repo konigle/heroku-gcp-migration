@@ -52,7 +52,7 @@ Once the migrations are applied on the Cloud SQL database (target database for r
 
 Once the database is set up, it is time to create a VM instance on which the Londiste will run.
 
-## Setup VM Instance Londiste
+## Setup VM Instance for Londiste
 We will be running Londiste services on a VM instance inside GCP. Follow the VM instance creation guide by Google Cloud while keeping following considerations in mind
 
 
@@ -62,10 +62,10 @@ We will be running Londiste services on a VM instance inside GCP. Follow the VM 
     - Allocate at least 2 vCPUs and 4 GB RAM for the VM instance. Londiste consists of multiple services required to be running and several processes required for initial copy of the database.
     - You can create a separate service account with `Cloud SQL Client` access scope and associate with this VM instance.
     - Make sure the instance is dedicated instance and keep at least 2 GB memory. We don't want the agent to run out of memory. We went with `e2-standard-2` instance.
-- It is preferable to locate the closer the Heroku Postgres. This can speed up initial copy of the database if the database is large.
+- It is preferable to locate the VM instance closer the Heroku Postgres. This can speed up initial copy of the database if the database is large.
 
 Once the VM is ready, 
-1. SSH into the instance and clone this repo in the VM instance.
+1. SSH into the instance and clone this repo.
 
 ```shell
 gcloud compute ssh --project=<project_id> --zone=<zone> <instance_id>
@@ -83,11 +83,12 @@ cd heroku-gcp-migration
 ./setup-db-bridge.sh
 ```
 
-3. Run the below commands to set up Londiste
+3. Run the below command to set up Londiste
 ```shell
 ./setup-londiste.sh
 ```
-This should finish without any errors.
+This should finish without any errors. The SQL scripts by PGQ and Londiste are modified and copied under `londiste` directory to make them
+compatible with Heroku Postgres.
 
 After this setup, you will have below tools installed on the VM.
 1. londiste - replication agent
